@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:productos_app/screens/screens.dart';
 
-void main() => runApp(MyApp());
+void main() => runApp(const MyApp());
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -13,16 +13,24 @@ class MyApp extends StatelessWidget {
       title: 'Material App',
       home: Scaffold(
         appBar: AppBar(
-          title: Text('Material App'),
+          title: const Text('Material App'),
         ),
       ),
-      initialRoute: 'login',
+      initialRoute: 'home ',
       routes: {
-        'login': (context) => LoginScreen(),
-        'home': (context) => HomeScreen()
+        'login': (context) => const LoginScreen(),
+        'home': (context) => const HomeScreen()
       },
-      theme:
-          ThemeData.light().copyWith(scaffoldBackgroundColor: Colors.grey[300]),
+      theme: ThemeData.light().copyWith(
+          scaffoldBackgroundColor: Colors.grey[300],
+          appBarTheme: const AppBarTheme(
+            elevation: 0,
+            color: Colors.indigo,
+          ),
+          floatingActionButtonTheme: const FloatingActionButtonThemeData(
+            backgroundColor: Colors.indigo,
+            elevation: 0,
+          )),
     );
   }
 }
