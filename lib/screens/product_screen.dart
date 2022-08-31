@@ -32,6 +32,8 @@ class _ProductScreenBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final productFormProvider = Provider.of<ProductFormProvider>(context);
+
     return Scaffold(
       body: SingleChildScrollView(
         //physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
@@ -79,7 +81,11 @@ class _ProductScreenBody extends StatelessWidget {
       floatingActionButton: Padding(
         padding: const EdgeInsets.only(bottom: 10),
         child: FloatingActionButton(
-          onPressed: () {},
+          onPressed: () {
+            if (!productFormProvider.isValidForm()) return;
+            productService.saveOrCreateProduct(productFormProvider.product);
+            FocusManager.instance.primaryFocus?.unfocus();
+          },
           child: const Icon(Icons.save_outlined),
         ),
       ),
@@ -104,55 +110,56 @@ class _ProductForm extends StatelessWidget {
         width: double.infinity,
         decoration: _buildBoxDecoration(),
         child: Form(
+            key: productForm.formKey,
             child: Column(
-          children: [
-            const SizedBox(height: 10),
-            TextFormField(
-              decoration: InputDecorations.authInputDecoration(
-                hintText: 'Nombre del producto',
-                labelText: 'Nombre:',
-              ),
-              initialValue: product.name,
-              onChanged: (value) => product.name = value,
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'El nombre es obligatorio';
-                }
-              },
-            ),
-            const SizedBox(height: 30),
-            TextFormField(
-              keyboardType: TextInputType.number,
-              decoration: InputDecorations.authInputDecoration(
-                hintText: '\$150',
-                labelText: 'Precio:',
-              ),
-              initialValue: '${product.price}',
-              onChanged: (value) {
-                if (double.tryParse(value) == null) {
-                  product.price = 0;
-                } else {
-                  product.price = double.parse(value);
-                }
-              },
-              inputFormatters: [
-                FilteringTextInputFormatter.allow(
-                  RegExp(r'^(\d+)?\.?\d{0,2}'),
-                )
+              children: [
+                const SizedBox(height: 10),
+                TextFormField(
+                  decoration: InputDecorations.authInputDecoration(
+                    hintText: 'Nombre del producto',
+                    labelText: 'Nombre:',
+                  ),
+                  initialValue: product.name,
+                  onChanged: (value) => product.name = value,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'El nombre es obligatorio';
+                    }
+                  },
+                ),
+                const SizedBox(height: 30),
+                TextFormField(
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecorations.authInputDecoration(
+                    hintText: '\$150',
+                    labelText: 'Precio:',
+                  ),
+                  initialValue: '${product.price}',
+                  onChanged: (value) {
+                    if (double.tryParse(value) == null) {
+                      product.price = 0;
+                    } else {
+                      product.price = double.parse(value);
+                    }
+                  },
+                  inputFormatters: [
+                    FilteringTextInputFormatter.allow(
+                      RegExp(r'^(\d+)?\.?\d{0,2}'),
+                    )
+                  ],
+                ),
+                const SizedBox(height: 30),
+                SwitchListTile.adaptive(
+                  value: product.available,
+                  title: const Text('Disponible'),
+                  activeColor: Colors.indigo,
+                  onChanged: (value) {
+                    productForm.updateAvailability(value);
+                  },
+                ),
+                const SizedBox(height: 30),
               ],
-            ),
-            const SizedBox(height: 30),
-            SwitchListTile.adaptive(
-              value: product.available,
-              title: const Text('Disponible'),
-              activeColor: Colors.indigo,
-              onChanged: (value) {
-                productForm.updateAvailability(value);
-              },
-            ),
-            const SizedBox(height: 30),
-          ],
-        )),
+            )),
       ),
     );
   }
