@@ -7,6 +7,7 @@ import 'package:productos_app/services/product_service.dart';
 import 'package:productos_app/ui/input_decorations.dart';
 import 'package:productos_app/widgets/widgets.dart';
 import 'package:provider/provider.dart';
+import 'package:image_picker/image_picker.dart';
 
 class ProductScreen extends StatelessWidget {
   const ProductScreen({Key? key}) : super(key: key);
@@ -59,15 +60,47 @@ class _ProductScreenBody extends StatelessWidget {
                 Positioned(
                   top: 60,
                   right: 20,
-                  child: IconButton(
-                    onPressed: () {
-                      //TODO: CAMARA
-                    },
-                    icon: const Icon(
-                      Icons.camera_alt_outlined,
-                      size: 40,
-                      color: Colors.white,
-                    ),
+                  child: Column(
+                    children: [
+                      IconButton(
+                        onPressed: () async {
+                          final picker = ImagePicker();
+                          final XFile? pickedFile = await picker.pickImage(
+                            source: ImageSource.camera,
+                            imageQuality: 100,
+                          );
+
+                          if (pickedFile == null) return;
+
+                          productService
+                              .updateSelectedProductImage(pickedFile.path);
+                        },
+                        icon: const Icon(
+                          Icons.camera_alt_outlined,
+                          size: 40,
+                          color: Colors.white,
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      IconButton(
+                        onPressed: () async {
+                          final picker = ImagePicker();
+                          final XFile? pickedFile = await picker.pickImage(
+                            source: ImageSource.gallery,
+                            imageQuality: 100,
+                          );
+                          if (pickedFile == null) return;
+
+                          productService
+                              .updateSelectedProductImage(pickedFile.path);
+                        },
+                        icon: const Icon(
+                          Icons.image,
+                          size: 40,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ],
@@ -81,12 +114,21 @@ class _ProductScreenBody extends StatelessWidget {
       floatingActionButton: Padding(
         padding: const EdgeInsets.only(bottom: 10),
         child: FloatingActionButton(
-          onPressed: () {
-            if (!productFormProvider.isValidForm()) return;
-            productService.saveOrCreateProduct(productFormProvider.product);
-            FocusManager.instance.primaryFocus?.unfocus();
-          },
-          child: const Icon(Icons.save_outlined),
+          onPressed: productService.isSaving
+              ? null
+              : () async {
+                  if (!productFormProvider.isValidForm()) return;
+                  final String? imageUrl = await productService.uploadImage();
+                  if (imageUrl != null)
+                    productFormProvider.product.picture = imageUrl;
+                  await productService
+                      .saveOrCreateProduct(productFormProvider.product);
+                  FocusManager.instance.primaryFocus?.unfocus();
+                  Navigator.pop(context);
+                },
+          child: productService.isSaving
+              ? CircularProgressIndicator(color: Colors.white)
+              : const Icon(Icons.save_outlined),
         ),
       ),
     );
