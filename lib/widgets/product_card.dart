@@ -54,9 +54,7 @@ class ProductCard extends StatelessWidget {
 }
 
 class _NotAvailable extends StatelessWidget {
-  const _NotAvailable({
-    super.key,
-  });
+  const _NotAvailable();
 
   @override
   Widget build(BuildContext context) {
@@ -87,7 +85,6 @@ class _PriceTag extends StatelessWidget {
   final double price;
 
   const _PriceTag({
-    super.key,
     required this.price,
   });
 
@@ -122,7 +119,6 @@ class _ProductDetails extends StatelessWidget {
   final String id;
 
   const _ProductDetails({
-    super.key,
     required this.name,
     required this.id,
   });
@@ -171,7 +167,6 @@ class _BackgroundImage extends StatelessWidget {
   final String? url;
 
   const _BackgroundImage({
-    super.key,
     this.url,
   });
 

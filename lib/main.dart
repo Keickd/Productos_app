@@ -3,18 +3,23 @@ import 'package:productos_app/screens/screens.dart';
 import 'package:productos_app/services/services.dart';
 import 'package:provider/provider.dart';
 
-void main() => runApp(AppState());
+void main() => runApp(const AppState());
 
 class AppState extends StatelessWidget {
+  const AppState({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
           create: (context) => ProductsService(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => AuthService(),
         )
       ],
-      child: MyApp(),
+      child: const MyApp(),
     );
   }
 }
@@ -32,12 +37,15 @@ class MyApp extends StatelessWidget {
           title: const Text('Material App'),
         ),
       ),
-      initialRoute: 'home',
+      initialRoute: 'checking',
       routes: {
+        'checking': (context) => const CheckAuthScreen(),
         'login': (context) => const LoginScreen(),
+        'register': (context) => const RegisterScreen(),
         'home': (context) => const HomeScreen(),
-        'product': (context) => const ProductScreen()
+        'product': (context) => const ProductScreen(),
       },
+      scaffoldMessengerKey: NotificationService.messengerKey,
       theme: ThemeData.light().copyWith(
         scaffoldBackgroundColor: Colors.grey[300],
         appBarTheme: const AppBarTheme(

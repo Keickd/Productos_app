@@ -6,8 +6,8 @@ import 'package:provider/provider.dart';
 
 import '../services/services.dart';
 
-class LoginScreen extends StatelessWidget {
-  const LoginScreen({Key? key}) : super(key: key);
+class RegisterScreen extends StatelessWidget {
+  const RegisterScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +21,7 @@ class LoginScreen extends StatelessWidget {
               child: Column(
                 children: [
                   const SizedBox(height: 10),
-                  Text('Login',
+                  Text('Crear cuenta',
                       style: Theme.of(context).textTheme.headlineMedium),
                   const SizedBox(height: 30),
                   ChangeNotifierProvider(
@@ -33,14 +33,14 @@ class LoginScreen extends StatelessWidget {
             const SizedBox(height: 50),
             TextButton(
               onPressed: () {
-                Navigator.pushReplacementNamed(context, 'register');
+                Navigator.pushReplacementNamed(context, 'login');
               },
               style: ButtonStyle(
                   overlayColor:
                       MaterialStateProperty.all(Colors.indigo.withOpacity(0.1)),
                   shape: MaterialStateProperty.all(const StadiumBorder())),
               child: const Text(
-                'Crear una nueva cuenta',
+                '¿Ya tienes una cuenta?',
                 style: TextStyle(fontSize: 18, color: Colors.black87),
               ),
             ),
@@ -53,7 +53,7 @@ class LoginScreen extends StatelessWidget {
 }
 
 class _LoginForm extends StatelessWidget {
-  const _LoginForm();
+  const _LoginForm({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -107,7 +107,7 @@ class _LoginForm extends StatelessWidget {
                     FocusScope.of(context).unfocus();
                     loginForm.isLoading = true;
 
-                    final String? errorMessage = await authService.login(
+                    final String? errorMessage = await authService.createUser(
                         loginForm.email, loginForm.password);
                     if (errorMessage == null) {
                       Navigator.pushReplacementNamed(context, 'home');
@@ -126,8 +126,8 @@ class _LoginForm extends StatelessWidget {
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 80, vertical: 15),
               child: Text(
-                loginForm.isLoading ? 'Wait' : 'Login',
-                style: const TextStyle(color: Colors.white),
+                loginForm.isLoading ? 'Wait' : 'Crear cuenta',
+                style: TextStyle(color: Colors.white),
               ),
             ),
           )

@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:productos_app/providers/product_form_provider.dart';
@@ -25,7 +23,6 @@ class ProductScreen extends StatelessWidget {
 
 class _ProductScreenBody extends StatelessWidget {
   const _ProductScreenBody({
-    super.key,
     required this.productService,
   });
 
@@ -119,15 +116,16 @@ class _ProductScreenBody extends StatelessWidget {
               : () async {
                   if (!productFormProvider.isValidForm()) return;
                   final String? imageUrl = await productService.uploadImage();
-                  if (imageUrl != null)
+                  if (imageUrl != null) {
                     productFormProvider.product.picture = imageUrl;
+                  }
                   await productService
                       .saveOrCreateProduct(productFormProvider.product);
                   FocusManager.instance.primaryFocus?.unfocus();
                   Navigator.pop(context);
                 },
           child: productService.isSaving
-              ? CircularProgressIndicator(color: Colors.white)
+              ? const CircularProgressIndicator(color: Colors.white)
               : const Icon(Icons.save_outlined),
         ),
       ),
@@ -136,9 +134,7 @@ class _ProductScreenBody extends StatelessWidget {
 }
 
 class _ProductForm extends StatelessWidget {
-  const _ProductForm({
-    super.key,
-  });
+  const _ProductForm();
 
   @override
   Widget build(BuildContext context) {

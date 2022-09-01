@@ -12,8 +12,8 @@ class AuthBackground extends StatelessWidget {
       height: double.infinity,
       child: Stack(
         children: [
-          _PurpleBox(),
-          _headerIcon(),
+          const _PurpleBox(),
+          const _HeaderIcon(),
           child,
         ],
       ),
@@ -21,25 +21,23 @@ class AuthBackground extends StatelessWidget {
   }
 }
 
-class _headerIcon extends StatelessWidget {
-  const _headerIcon({
-    super.key,
-  });
+class _HeaderIcon extends StatelessWidget {
+  const _HeaderIcon();
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Container(
         width: double.infinity,
-        margin: EdgeInsets.only(top: 30),
-        child: Icon(Icons.person_pin, color: Colors.white, size: 100),
+        margin: const EdgeInsets.only(top: 30),
+        child: const Icon(Icons.person_pin, color: Colors.white, size: 100),
       ),
     );
   }
 }
 
 class _PurpleBox extends StatelessWidget {
-  const _PurpleBox({super.key});
+  const _PurpleBox();
 
   @override
   Widget build(BuildContext context) {
@@ -50,31 +48,31 @@ class _PurpleBox extends StatelessWidget {
       height: size.height * 0.4,
       decoration: _purpleBackground(),
       child: Stack(
-        children: [
+        children: const [
           Positioned(
-            child: _Bubble(),
             top: 90,
             left: 30,
+            child: _Bubble(),
           ),
           Positioned(
-            child: _Bubble(),
             top: -40,
             left: -30,
+            child: _Bubble(),
           ),
           Positioned(
-            child: _Bubble(),
             top: -50,
             right: -20,
+            child: _Bubble(),
           ),
           Positioned(
-            child: _Bubble(),
             bottom: -50,
             left: 10,
+            child: _Bubble(),
           ),
           Positioned(
-            child: _Bubble(),
             bottom: 120,
             right: 20,
+            child: _Bubble(),
           ),
         ],
       ),
@@ -82,7 +80,7 @@ class _PurpleBox extends StatelessWidget {
   }
 
   BoxDecoration _purpleBackground() {
-    return BoxDecoration(
+    return const BoxDecoration(
       gradient: LinearGradient(
         colors: [
           Color.fromRGBO(63, 63, 156, 1),
@@ -94,7 +92,7 @@ class _PurpleBox extends StatelessWidget {
 }
 
 class _Bubble extends StatelessWidget {
-  const _Bubble({super.key});
+  const _Bubble();
 
   @override
   Widget build(BuildContext context) {
@@ -103,7 +101,7 @@ class _Bubble extends StatelessWidget {
       height: 100,
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(100),
-          color: Color.fromRGBO(255, 255, 255, 0.05)),
+          color: const Color.fromRGBO(255, 255, 255, 0.05)),
     );
   }
 }
